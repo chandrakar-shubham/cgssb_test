@@ -1,0 +1,6 @@
+{
+  "name": "CGSSB Test",
+  "description": "Online competitive exam, mock test, and PYP practice platform for CGSSB, CGPSC, Swami Atmanand, and competitive exams with Android API connectivity.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
