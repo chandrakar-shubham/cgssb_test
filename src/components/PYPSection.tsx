@@ -11,14 +11,18 @@ import {
   CheckCircle,
   BarChart,
   Layers,
-  Sparkles
+  Sparkles,
+  Grid,
+  ShieldCheck
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 interface PYPSectionProps {
   pypPapers: PreviousYearPaper[];
   onPracticePaper: (pyp: PreviousYearPaper) => void;
   selectedCategory: ExamCategory | 'ALL';
   onSelectCategory: (category: ExamCategory | 'ALL') => void;
+  onOpenAdminPYP?: () => void;
 }
 
 export const PYPSection: React.FC<PYPSectionProps> = ({
@@ -26,7 +30,9 @@ export const PYPSection: React.FC<PYPSectionProps> = ({
   onPracticePaper,
   selectedCategory,
   onSelectCategory,
+  onOpenAdminPYP,
 }) => {
+  const { user, switchRole } = useAuth();
   const [activePaperForAnalysis, setActivePaperForAnalysis] = useState<PreviousYearPaper | null>(null);
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
 
@@ -76,7 +82,7 @@ Visit https://cgssbtest.com for online mock test simulation.
   return (
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Header Banner */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-lg">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="max-w-2xl">
           <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 inline-flex items-center space-x-1.5 mb-2">
             <Sparkles className="w-3 h-3" />
@@ -88,6 +94,19 @@ Visit https://cgssbtest.com for online mock test simulation.
           <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
             Practice past year question papers conducted by CG Vyapam, CGPSC, and Swami Atmanand authorities under genuine timed exam conditions with automated negative marking calculation.
           </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            onClick={() => {
+              if (user?.role !== 'admin') switchRole('admin');
+              if (onOpenAdminPYP) onOpenAdminPYP();
+            }}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center space-x-2 shadow-lg shadow-blue-500/20 transition cursor-pointer"
+          >
+            <Grid className="w-4 h-4" />
+            <span>Open Ingestion Grid & AI</span>
+          </button>
         </div>
       </div>
 

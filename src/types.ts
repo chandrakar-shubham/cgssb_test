@@ -44,24 +44,38 @@ export interface PYQAppearance {
 }
 
 export interface Question {
-  id: string; // Unique Question ID (e.g. QID-CG-1001)
+  id: string; // Unique Question ID (e.g. QID-CGSSB-2024-001)
+  uniqueQuestionId?: string;
   subject: string;
   topic: string;
   subtopic: string;
   difficulty: DifficultyLevel;
   questionText: string;
+  text?: string; // alias for compatibility
   questionHindi?: string;
+  textHindi?: string; // alias for compatibility
   options: QuestionOption[];
   correctOption: 'A' | 'B' | 'C' | 'D';
+  correctAnswer?: 'A' | 'B' | 'C' | 'D'; // alias for compatibility
   marks: number;
   negativeMarks: number;
   explanation: string;
   explanationHindi?: string;
   pypSource?: string;
+  examSource?: string;
   pypAppearances?: PYQAppearance[]; // Multiple exam appearances with year and exam name
+  repeatedInExams?: string[];
+  similarQuestionIds?: string[];
+  moduleId?: string;
+  chapterId?: string;
+  chapterName?: string;
+  keyFactHindi?: string;
   category: ExamCategory;
+  year?: number;
   createdAt?: string;
 }
+
+export type ExamPaper = MockTest;
 
 export type QuestionPaletteStatus = 
   | 'not_visited' 

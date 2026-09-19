@@ -478,6 +478,7 @@ function MainApp() {
             onPracticePaper={handlePracticePaper}
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
+            onOpenAdminPYP={() => setActiveTab('admin-pyp')}
           />
         )}
 

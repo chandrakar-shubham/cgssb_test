@@ -125,7 +125,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Role Switcher Pill */}
             <div className="flex items-center bg-slate-950/80 p-0.5 rounded-lg border border-slate-800">
               <button
-                onClick={() => switchRole('student')}
+                onClick={() => {
+                  switchRole('student');
+                  setActiveTab('tests');
+                }}
                 title="Switch to Student view"
                 className={`px-2 py-1 rounded-md text-xs font-bold flex items-center space-x-1 transition ${
                   user?.role === 'student'
@@ -137,7 +140,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="hidden sm:inline">Student</span>
               </button>
               <button
-                onClick={() => switchRole('admin')}
+                onClick={() => {
+                  switchRole('admin');
+                  setActiveTab('admin-pyp');
+                }}
                 title="Switch to Admin view"
                 className={`px-2 py-1 rounded-md text-xs font-bold flex items-center space-x-1 transition ${
                   user?.role === 'admin'

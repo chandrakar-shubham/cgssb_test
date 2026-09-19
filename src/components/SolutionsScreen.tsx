@@ -500,6 +500,11 @@ export const SolutionsScreen: React.FC<SolutionsScreenProps> = ({
                         Bank QID: {q.id}
                       </span>
 
+                      {q.chapterName && (
+                        <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 font-medium text-[11px] border border-purple-500/30">
+                          अध्याय: {q.chapterName}
+                        </span>
+                      )}
                       <span className="text-xs text-slate-400 font-medium">
                         {q.subject} • {q.topic}
                       </span>
@@ -652,6 +657,12 @@ export const SolutionsScreen: React.FC<SolutionsScreenProps> = ({
                           <p className="text-emerald-300/90 border-t border-slate-700/30 pt-1.5">
                             {q.explanationHindi}
                           </p>
+                        )}
+                        {q.keyFactHindi && (
+                          <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-2 text-amber-300 text-[11px] font-medium flex items-center space-x-1.5 mt-1.5">
+                            <span className="font-bold">⚡ मुख्य तथ्य:</span>
+                            <span>{q.keyFactHindi}</span>
+                          </div>
                         )}
                         {q.pypSource && (
                           <span className="inline-block text-[10px] text-slate-400 font-semibold bg-slate-900/60 px-2 py-0.5 rounded mt-1">

@@ -9,8 +9,15 @@ import {
   Layers,
   BarChart,
   CheckCircle,
-  Download
+  Download,
+  Grid,
+  Sparkles,
+  Hash,
+  BookOpenCheck,
+  Tag
 } from 'lucide-react';
+import { ManualGridBuilder } from './ManualGridBuilder';
+import { AIPYPExtractorModal } from './AIPYPExtractorModal';
 
 interface AdminPYPManagerProps {
   pypPapers: PreviousYearPaper[];
@@ -26,6 +33,8 @@ export const AdminPYPManager: React.FC<AdminPYPManagerProps> = ({
   onConvertPYPToMockTest,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGridBuilderOpen, setIsGridBuilderOpen] = useState(false);
+  const [isAIExtractorOpen, setIsAIExtractorOpen] = useState(false);
   const [convertedNotice, setConvertedNotice] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<{
@@ -91,13 +100,31 @@ export const AdminPYPManager: React.FC<AdminPYPManagerProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center space-x-2 transition shadow-lg shadow-emerald-500/20 self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Upload & Index New PYP</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={() => setIsGridBuilderOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm flex items-center space-x-2 transition shadow-lg shadow-blue-500/20 border border-blue-400/30 cursor-pointer"
+          >
+            <Grid className="w-4 h-4" />
+            <span>Interactive Grid Form</span>
+          </button>
+
+          <button
+            onClick={() => setIsAIExtractorOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center space-x-2 transition shadow-lg shadow-amber-500/20 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>AI Smart Ingest</span>
+          </button>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm flex items-center space-x-2 transition cursor-pointer"
+          >
+            <Plus className="w-4 h-4 text-emerald-400" />
+            <span>Quick Index PYP</span>
+          </button>
+        </div>
       </div>
 
       {convertedNotice && (
@@ -272,6 +299,45 @@ export const AdminPYPManager: React.FC<AdminPYPManagerProps> = ({
             </form>
           </div>
         </div>
+      )}
+
+      {/* Manual Grid Builder Modal */}
+      {isGridBuilderOpen && (
+        <ManualGridBuilder
+          onClose={() => setIsGridBuilderOpen(false)}
+          onSavePaper={(paper) => {
+            onAddPYP({
+              title: paper.title,
+              examCategory: paper.category === 'CGPSC' ? 'CGPSC' : 'CGSSB',
+              year: paper.year,
+              totalQuestions: paper.totalQuestions,
+              durationMinutes: paper.durationMinutes,
+              marks: paper.totalMarks,
+              negativeMarkingRatio: paper.category.includes('CGPSC') ? '1/3rd (0.67)' : '1/3rd (0.333)',
+              paperSummary: `Comprehensive ${paper.totalQuestions}-question paper aligned with official CG syllabus. Includes full bilingual explanations.`,
+              subjectsWeightage: [
+                { subject: 'Chhattisgarh General Studies', questionCount: Math.round(paper.totalQuestions * 0.4), percentage: 40 },
+                { subject: 'Aptitude, Computer & Language', questionCount: Math.round(paper.totalQuestions * 0.6), percentage: 60 },
+              ],
+            });
+            setIsGridBuilderOpen(false);
+            setConvertedNotice(paper.title);
+            setTimeout(() => setConvertedNotice(null), 3500);
+          }}
+          existingQuestions={[]}
+        />
+      )}
+
+      {/* Gemini AI Smart Ingestion Modal */}
+      {isAIExtractorOpen && (
+        <AIPYPExtractorModal
+          onClose={() => setIsAIExtractorOpen(false)}
+          onExtracted={() => {
+            setIsAIExtractorOpen(false);
+            setIsGridBuilderOpen(true);
+          }}
+          existingQuestions={[]}
+        />
       )}
     </div>
   );
